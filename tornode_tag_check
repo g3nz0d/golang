@@ -1,0 +1,9 @@
+#Check to see if the target server name (sub.domain.com) Matches list
+
+$matched_host_marketing := $.ServerName | lower | $.Config.TorBlockMatcherMarketing.MatchOne
+
+#Checks for the Site configuration state, whether there is a Tag of TORNODE, and whether the ServerName matches.
+
+if and (eq $.Config.EnabledState 2) (.TagList | ContainsAny "TORNODE") ($matched_host_marketing)
+  $.SetResponse $.Config.TorCustomBlockCode1718
+end
