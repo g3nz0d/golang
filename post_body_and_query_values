@@ -1,0 +1,35 @@
+# Send POST body and Query Values
+
+
+INIT
+# This rule looks for any GET or POST requests containing the tag 'expel-alert'.
+# If true, the additional tag of 'expel-alert-postbody' is added along with the postbody content for further inspection.
+# If a query string is present, the additional tag of 'expel-query' is added containing the URI value for further inspection.
+
+
+
+PRE RULE
+$alert_postbody := and \
+  ($.Method | upper | Equal "POST") \
+  ($.TagList | ContainsAny (Array "site.expel-alert"))
+
+$alert_postbody_query := and \
+  ($.Method | upper | Equal "GET") \
+  ($.TagList | ContainsAny (Array "site.expel-alert"))
+
+$query := $.QueryArgs
+
+if $alert_postbody
+    $.AddSignal "site.expel-alert-postbody" "POSTBODY" $.PostBody $ruleid
+        if $query
+            $.AddSignal "site.expel-query" "QUERYARGS" $.URI $ruleid
+        end
+end
+
+if $alert_postbody_query
+    $.AddSignal "site.expel-alert-postbody" "POSTBODY" $.PostBody $ruleid
+        if $query
+            $.AddSignal "site.expel-query" "QUERYARGS" $.URI $ruleid
+        end
+
+end#
