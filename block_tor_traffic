@@ -1,0 +1,35 @@
+# INIT RULE
+
+# NAME: Block All Tor Traffic  On Marketing Sites - Blocking Mode
+
+# DESCRIPTION: This custom rule will block all TOR Traffic tagged requests immediately if the site mode is Blocking. 
+# In Logging mode things will only be logged. In off mode nothing will happen
+
+# Modification: Added custom Block Response code for the TOR Traffic per Request.
+
+# Hostnames that will have TOR Traffic immediately blocked.
+
+# Host names that should allow any sub-domain must be prefixed with "*."
+
+
+$tor_block_domains_marketing := array \
+  "www.onelogin.com" \
+  "developers.onelogin.com" \
+  "www.samltool.com"
+
+$.Set "TorBlockMatcherMarketing" (NewGlobMatcher $tor_block_domains_marketing )
+$.Set "TorCustomBlockCode1718" 406
+
+
+
+#PRE-RULE
+
+#Check to see if target server name (sub.domain.com) Matches list
+
+$matched_host_marketing := $.ServerName | lower | $.Config.TorBlockMatcherMarketing.MatchOne
+
+#Checks for Site configuration state, if there is a Tag of TORNODE, and that the ServerName matched.
+
+if and (eq $.Config.EnabledState 2) (.TagList | ContainsAny "TORNODE") ($matched_host_marketing)
+  $.SetResponse $.Config.TorCustomBlockCode1718
+end
