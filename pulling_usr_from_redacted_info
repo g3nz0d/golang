@@ -1,0 +1,27 @@
+# Pulling Usernames out of Redacted Information
+
+
+INIT
+$path_patterns := Array "/account/*"
+$path_matcher := NewGlobMatcher $path_patterns
+$.Set "path_patterns" $path_matcher
+
+
+PRE RULE
+
+# Only uncomment the next line for testing purposes
+# $.AddTag "LOGINATTEMPT" $ruleid
+$servername_check := $.ServerName | StringEqualsQ IgnoreCase "myaccount.cityutilities.net"
+$method_check := $.Method | StringEqualsQ IgnoreCase "post"
+$path_check := $.Path | $.Config.path_patterns.MatchOne
+$signal_check := $.TagList | ContainsAny "LOGINATTEMPT"
+if and ($servername_check) ($method_check) ($path_check) ($signal_check)
+    range $current_postarg := $.PostArgs
+        $arg_name := (index $current_postarg 0)
+        $arg_value := (index $current_postarg 1)
+        if or ($arg_name | StringEqualsQ IgnoreCase "username") ($arg_name | StringEqualsQ IgnoreCase "/username")
+            $signal_value := printf "account_name=%s" $arg_value
+            $.AddSignal "info.username" "POST Body" $signal_value $ruleid
+        end
+    end
+end
