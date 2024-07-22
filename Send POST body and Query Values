@@ -1,0 +1,26 @@
+# Init Rule Stage
+# This rule looks for any GET requests containing the tag 'anon-eac-string'.
+# If a query string is present, the additional tag of 'anon-eac-query' is added containing the URI value for further inspection.
+
+
+# Pre Rule Stage
+# This works if you make a corp or site rule, by adding "corp.anon-eac-string"
+# UNCOMMENT NEXT LINE FOR TESTING ONLY
+# $.AddSignal "site.anon-eac-string" "test" "test" $ruleid
+$hasSignal := $.TagList | ContainsAny (Array "site.anon-eac-string" "corp.anon-eac-string")
+$getRequest := $.Method | upper | Equal "GET"
+if and ($hasSignal) ($getRequest)
+    range $.QueryArgs
+        $key := (index . 0)
+        $val := (index . 1)
+        $string := (printf "%s=%s" $key $val)
+        $.AddSignal "site.anon-eac-query" "QUERYARGS" $string $ruleid
+    end
+    range $.PostArgs
+        $key := (index . 0)
+        $val := (index . 1)
+        $string := (printf "%s=%s" $key $val)
+        $.AddSignal "site.anon-eac-post" "POSTARGS" $string $ruleid
+    end
+end
+
