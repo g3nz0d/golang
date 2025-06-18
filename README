@@ -1,0 +1,119 @@
+# Golang for Signal Sciences (Fastly NGWAF) 🛡️
+
+This repo contains Go scripts to test, automate, and extend functionality for Signal Sciences (now Fastly NGWAF). 
+
+# Scripts Included
+
+| Script | Description |
+|--------|-------------|
+| `block_tor_traffic.go` | Blocks traffic from Tor exit nodes using redaction signals or IP reputation |
+| `post_body_and_query_values.go` | Sends both POST bodies and query parameters to trigger detection rules |
+| `pulling_usr_from_redacted_info.go` | Parses logs and extracts user data from redacted inputs |
+| `tornode_tag_check.go` | Checks if Tor-related tags are properly applied or audited |
+
+# How to Run
+
+Make sure you have Go installed:
+
+```bash
+go version
+
+
+# To run a script: (Replace with the script of your choice)
+go run block_tor_traffic.go
+
+
+# Make sure Go is installed on your system by typing the following command in your shell: go version
+
+# Why This Repo Exists > This toolkit simplifies testing and enforcing custom NGWAF rules and signals using Go.
+
+
+
+
+# **Rename files for clarity (optional but recommended)**
+
+For example:
+- `post_body_and_query_values` ➝ `post_body_and_query_values.go`
+- `block_tor_traffic` ➝ `block_tor_traffic.go`
+
+#### How:
+- Click on the file name
+- Click the pencil icon to edit the name
+- Add `.go` and click **“Commit changes”**
+
+
+# **Organize folders if needed**
+
+If your repo is growing:
+- Group related files into folders like: 
+/scripts/
+/docs/
+/examples/
+
+
+
+
+GitHub will display folders automatically if you organize them locally and push via Git.
+
+---
+
+# **Optional: Add a LICENSE file**
+Click **Add file > Create new file**, name it `LICENSE`, and choose something like MIT license if you're sharing code openly.
+
+
+
+# **Commit and Push (if working locally)**
+
+If you’re working from your machine:
+```bash
+git pull origin main  # get latest
+
+# make changes (rename files, add folders, edit README, etc.)
+git add .
+git commit -m "Organized repo, added README and renamed scripts"
+git push origin main
+
+
+
+
+
+Created with ❤️ by Zodi Tagedini
+
+## ✅ 2. Rename Scripts with `.go` Extensions
+
+### From GitHub:
+1. Click on each filename (`block_tor_traffic`, etc.)
+2. Click the pencil icon 🖉 (top right)
+3. Rename to `block_tor_traffic.go`, then click **“Commit changes”**
+
+Repeat for:
+- `post_body_and_query_values.go`
+- `pulling_usr_from_redacted_info.go`
+- `tornode_tag_check.go`
+
+---
+
+## ✅ 3. Create a `.gitignore` for Go
+
+Create a new file in the root of the repo:
+- Name it `.gitignore`
+- Paste the following into it:
+
+```gitignore
+# Go build artifacts
+bin/
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+
+# Output of `go coverage`
+*.out
+
+# IDE settings
+.vscode/
+.idea/
+*.swp
+
